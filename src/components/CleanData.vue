@@ -40,8 +40,7 @@ export default {
         );
         workArray = workArray.filter((entry) => !isNull(entry));
         workArray = workArray.map(reformatDataEntry);
-
-
+        workArray = workArray.filter(d => d.capaciteit > 0);
         self.loadData = workArray;
         localStorage.setItem("workArray", JSON.stringify(workArray));
       }

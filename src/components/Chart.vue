@@ -139,8 +139,11 @@ export default {
           let input = document.createElement("input");
           input.setAttribute("type", "checkbox");
           input.setAttribute("value", allCityNames[city]);
-          if (selectedCities.includes(allCityNames[city]))
+          box.style = "order: 0";
+          if (selectedCities.includes(allCityNames[city])) {
             input.setAttribute("checked", "checked");
+            box.style = "order: -1";
+          }
           let label = document.createElement("label");
           label.textContent = allCityNames[city];
           label.setAttribute("for", allCityNames[city]);
@@ -210,7 +213,6 @@ export default {
         }
         return false;
       }
-
       function transformToPercentages(dataEntry) {
         const allCityTotals = JSON.parse(localStorage.getItem("cityTotals"));
         let percentage, i;
@@ -255,16 +257,17 @@ export default {
             .attr("height", (d) => innerHeight - yScale(+d.capaciteit))
             .attr("class", "bar");
 
-            g.selectAll('text.bartext')
-              .data(data)
-              .enter().append('text')
-                .attr('class','bartext')
-                .attr('text-anchor','middle')
-                .attr('x', (d) => xScale(d.stad) + (xScale.bandwidth() / 2 ))
-                .attr("width", xScale.bandwidth())
-                .attr('y', (d) => yScale(+d.capaciteit))
-                .attr("transform", 'translate(0, -10)')
-                .text((d) => parseInt(+d.capaciteit));
+          g.selectAll("text.bartext")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("class", "bartext")
+            .attr("text-anchor", "middle")
+            .attr("x", (d) => xScale(d.stad) + xScale.bandwidth() / 2)
+            .attr("width", xScale.bandwidth())
+            .attr("y", (d) => yScale(+d.capaciteit))
+            .attr("transform", "translate(0, -10)")
+            .text((d) => parseInt(+d.capaciteit));
         };
         //and put it to work!
         render(workableData);
@@ -313,32 +316,31 @@ export default {
             .exit() // focus on what's old.
             .remove(); // and get rid of that.
 
-
           //update texts
-            let allTexts = g.selectAll('text.bartext')
-              .data(data);
+          let allTexts = g.selectAll("text.bartext").data(data);
 
-              allTexts
-                .text((d) => (+d.capaciteit));
+          allTexts.text((d) => +d.capaciteit);
+          
+          allTexts
+            .enter()
+            .append("text")
+            // FROM
+            .attr("class", "bartext")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(0, -8)")
+            .attr("x", width)
+            .attr("y", (d) => height - yScale(d.capaciteit))
+            .text((d) => parseInt(+d.capaciteit))
+            .merge(allTexts)
+            .transition()
+            .duration(500)
 
-              allTexts
-              .enter().append('text')
-              // FROM
-                .attr('class','bartext')
-                .attr('text-anchor','middle')
-                .attr("transform", 'translate(0, -10)')
-                .attr("x", width) 
-                .attr("y", (d) => height - yScale(d.capaciteit))
-                .text((d) => parseInt(+d.capaciteit))
-                .merge(allTexts)
-                .transition().duration(500)
+            // TO
+            .attr("x", (d) => xScale(d.stad) + xScale.bandwidth() / 2)
+            .attr("width", xScale.bandwidth())
+            .attr("y", (d) => yScale(+d.capaciteit));
 
-              // TO
-                .attr('x', (d) => xScale(d.stad) + (xScale.bandwidth() / 2 ))
-                .attr("width", xScale.bandwidth())
-                .attr('y', (d) => yScale(+d.capaciteit));
-
-              allTexts.exit().remove();
+          allTexts.exit().remove();
 
           // update Axis
           g.selectAll(".ax.y")
@@ -369,9 +371,8 @@ export default {
       d3.selectAll(".cities").on("click", function (e) {
         if (e.target.type == "checkbox") {
           if (e.target.checked) selectedCities.push(e.target.value);
-          else {
+          else
             selectedCities = selectedCities.filter((d) => d != e.target.value);
-          }
           localStorage.setItem(
             "selectedCities",
             JSON.stringify(selectedCities)
@@ -549,6 +550,8 @@ input[type="radio"]:checked + label {
   height: 100%;
 }
 .cities {
+  display: flex;
+  flex-direction: column;
   height: 60%;
   overflow: scroll;
   background: white;
@@ -613,11 +616,12 @@ input[type="radio"]:checked + label {
   height: 100%;
   opacity: 0;
   z-index: 3;
+  cursor: pointer;
 }
 .percentage div {
   width: 2rem;
   height: 28px;
-  background: #E9E9E9;
+  background: #e9e9e9;
   border-radius: 28px;
   margin: 0 0.5rem;
   position: relative;
