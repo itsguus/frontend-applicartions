@@ -17,7 +17,7 @@ export default {
     name: "Explanation",
     data: function () {
         return {
-            title_top: "Parkeerplaatsen in Nederlandse steden en dorpen",
+            title_top: "Parkeercapaciteit in Nederlandse steden en dorpen",
             message_top: "Hpo",
             title_bottom: "Interactieve barchart",
             message_bottom: "bla"
