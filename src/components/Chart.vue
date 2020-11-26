@@ -527,11 +527,11 @@ input[type="radio"] {
 input[type="radio"] + label {
   color: #353535;
   border-radius: 0.2rem;
-  padding: 0.2rem;
+  padding: 0.2rem 0.1rem;
   font-size: 0.8rem;
   margin-right: 0.2rem;
   cursor: pointer;
-  width: 1.2rem;
+  width: 1.4rem;
   display: inline-block;
   text-align: center;
 }
@@ -542,7 +542,7 @@ input[type="radio"]:checked + label {
   background: steelblue;
   color: #fff;
   border-radius: 0.2rem;
-  padding: 0.2rem;
+  padding: 0.2rem 0.1rem;
   font-size: 0.8rem;
   transition: 500ms ease;
 }
