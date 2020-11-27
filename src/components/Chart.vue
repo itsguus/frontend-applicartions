@@ -140,10 +140,8 @@ export default {
           let input = document.createElement("input");
           input.setAttribute("type", "checkbox");
           input.setAttribute("value", allCityNames[city]);
-          box.style = "order: 0";
           if (selectedCities.includes(allCityNames[city])) {
             input.setAttribute("checked", "checked");
-            box.style = "order: -1";
           }
           let label = document.createElement("label");
           label.textContent = allCityNames[city];
